@@ -5,11 +5,9 @@ Based on *Any-stepsize Gradient Descent for Separable Data under Fenchel-Young L
 
 ## Introduction
 
-We're studying the behavior of large step-sizes on Gradient Descent (GD).
+We're studying the behavior of large step-sizes on Gradient Descent (GD), one of the most common optimizers in Machine Learning. 
 
-GD is one of the most common optimizers in Machine Learning. 
-
-Wu et al. shows that under logistic regression with linearly separable data, GD with large step sizes still converges. Bao et al. extends this finding further. We will start by analyzing the simpler case in Wu et al.'s study.
+Wu et al. shows that under logistic regression with linearly separable data, GD with large step sizes still converges. Bao et al. extends this finding further. We will start by analyzing the simpler case in Wu et al, and then looking to generalize this.
 
 
 ## Context
@@ -34,7 +32,7 @@ This means that the vector $\frac{w^{\ast}}{\gamma}$ produces a score $z_i = y_i
 
 
 
-## Logistic Loss Landscape and convergence
+## Logistic Loss Landscape
 
 Optimizing the model is equivalent to maximizing the likelihood for the probability function:
 
@@ -68,6 +66,36 @@ The descent lemma guarantees GD convergence for any $0 < \eta < 8$.
 
 ## Edge of Stability (EoS)
 
+Cohen et al. (https://arxiv.org/abs/2103.00065) states how Gradient Descent training becomes unstable when the sharpness value (max eigenvalue of the Loss Hessian) hovers at or surpasses $\frac{2}{\eta}$. This threshold is called Edge of Stability (EoS), where GD causes the loss to oscillate instead of monotonically dropping.
+
+We will explore this definition in the context of the Logistic Loss, and find a bound to its sharpness value.
+
 <img src="https://github.com/slamgLuke/anystep-gradient-descent/raw/main/boards/board4.jpg" width="500">
 
+The Hessian is defined by the outer product of each data point $\mathbf{x}_i$ by itself: $\mathbf{x}_i\mathbf{x}_i^\top$, scaled by the second derivative of the score $z_i$, and averaged for all $i$ data points.
+
 <img src="https://github.com/slamgLuke/anystep-gradient-descent/raw/main/boards/board5.jpg" width="500">
+
+Max eigenvalue properties give us an upper bound for the sharpness of the Logistic Loss, which is 1/4. Smoothness and Edge of Stability in GD are very closely related topics.
+
+Following this logic, EoS can only theoretically be reached if a value of $\eta \geq 8$ is used, which is outside the bounds of the descent lemma.
+
+Let's evaluate under what conditions this 1/4 bound is reached:
+
+<img src="https://github.com/slamgLuke/anystep-gradient-descent/raw/main/boards/board6.jpg" width="500">
+
+So, when initializing the weights at $w_0 = 0$, the maximum sharpness value is reached.
+
+Since $x_ix_i^\top$ is constant, as $w$ moves away from 0, the value of $\ell''(z)$ decreases, and so does the sharpness.
+
+## Convergence for large step-size
+
+The expected behavior one would find from this is that when using a large $\eta$ value for training, the loss curve would me more unstable at the beginning, becoming more stable as $|w|$ grows.
+
+However, we haven't explored GD convergence outside the range from the descent lemma.
+
+
+
+## Generalization beyond Logistic
+
+Wu et al. 
