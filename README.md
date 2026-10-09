@@ -26,10 +26,10 @@ We will study the behavior of large GD step-sizes with the same conditions of Wu
 - All data points $x_i$ have a magnitude of at most 1.
 - The two classes are linearly separable.
 - Labels are defined as $y_i \in \{-1, +1\}$
-- There is a unit vector $w^{*}$ and a $\gamma > 0$ such that $\langle y_i x_i, w^{*}\rangle \geq \gamma$ for all $i$
+- There is a unit vector $w^{\ast}$ and a $\gamma > 0$ such that $\langle y_i x_i, w^{\ast}\rangle \geq \gamma$ for all $i$
 
-This last point is used to refer to the fact that under an optimal vector $w^{*}$ which separates the data, the closest point to the decision boundary is at distance $\gamma > 0$.
-This means that the vector $\frac{w^{*}}{\gamma}$ produces a score $z_i = y_i \langle x_i, \frac{w^{*}}{\gamma}\rangle \geq 1$.
+This last point is used to refer to the fact that under an optimal vector $w^{\ast}$ which separates the data the best, the closest point to the decision boundary is at distance $\gamma > 0$.
+This means that the vector $\frac{w^{\ast}}{\gamma}$ produces a score $z_i = y_i \langle x_i, \frac{w^{\ast}}{\gamma}\rangle \geq 1$ for all $i$.
 
 
 ## Loss Landscape
