@@ -32,11 +32,38 @@ This last point is used to refer to the fact that under an optimal vector $w^{\a
 This means that the vector $\frac{w^{\ast}}{\gamma}$ produces a score $z_i = y_i \langle x_i, \frac{w^{\ast}}{\gamma}\rangle \geq 1$ for all $i$.
 
 
-## Loss Landscape
+## Logistic Loss Landscape and convergence
+
+Optimizing the model is equivalent to maximizing the likelihood for the probability function:
+
+$$p(y|x) = \sigma(y_i \langle x_i, w\rangle), \;\; \sigma(z) = \cfrac{1}{1 + e^{-z}}$$
+
+$$\text{argmax}_w \; \frac{1}{n}\prod_{i=1}^{n}p(y_i|x_i)$$
+
+Which is equivalent to minimizing the Negative Log-likelihood.
+
+$$\mathcal{L}(w) = \frac{1}{n}\sum_{i=1}^{n}-\log p(y_i|x_i)\$$
+
+Now we will derive to find the $\beta$-smoothness of $\mathcal{l}(z_i) = -\log p(y_i|x_i)$, and then use that to find the smoothness for $\mathcal{L}(w)$.
 
 <img src="https://github.com/slamgLuke/anystep-gradient-descent/raw/main/boards/board2.jpg" width="500">
 
+The second derivative of $\mathcal{l}(z)$ peaks at $z=0$, with a value of 1/4.
+
+Since 1/4 is the absolute largest value of $\mathcal{l}''(z)$, we can use the Mean Value Theorem to show that $\mathcal{l}'(z)$ is 1/4-Lipschitz.
+
+And the definition for smoothness states that a function is $\beta$-smooth when its derivative is $\beta$-Lipschitz. $\mathcal{l}(z)$ is 1/4-smooth.
+
+Now we bring this to find the smoothness of $\mathcal{L}(w)$:
+
 <img src="https://github.com/slamgLuke/anystep-gradient-descent/raw/main/boards/board3.jpg" width="500">
+
+Because $y_i$ values are exactly +1 or -1, and the data points $x_i$ are bounded to have a norm of less than 1, the gradient of the NLL cannot change at a larger rate than the derivative of the log probability when varying the weights. Hence $\nabla\mathcal{L}(w)$ is 1/4-Lipschitz, and therefore, $\mathcal{L}(w)$ is 1/4-smooth.
+
+The descent lemma guarantees GD convergence for any $0 < \eta < 8$.
+
+
+## Edge of Stability (EoS)
 
 <img src="https://github.com/slamgLuke/anystep-gradient-descent/raw/main/boards/board4.jpg" width="500">
 
