@@ -26,7 +26,7 @@ We will study the behavior of large GD step-sizes with the same conditions of Wu
 - Labels are defined as $y_i \in \{-1, +1\}$
 - There is a unit vector $w^{\ast}$ and a $\gamma > 0$ such that $\langle y_i x_i, w^{\ast}\rangle \geq \gamma$ for all $i$
 
-This last point is used to refer to the fact that under an optimal vector $w^{\ast}$ which separates the data the best, the closest point to the decision boundary is at distance $\gamma > 0$.
+This last point is used to refer to the fact that under an optimal vector $w^{\ast}$, the closest point to the decision boundary is at distance $\gamma > 0$.
 This means that the vector $\frac{w^{\ast}}{\gamma}$ produces a score $z_i = y_i \langle x_i, \frac{w^{\ast}}{\gamma}\rangle \geq 1$ for all $i$.
 
 <img src="https://github.com/slamgLuke/anystep-gradient-descent/raw/main/boards/board1.jpg" width="500">
@@ -41,11 +41,11 @@ Optimizing the model is equivalent to maximizing the likelihood for the probabil
 $$p(y_i|x_i) = \sigma(y_i \langle x_i, w\rangle)$$
 $$\text{where  } \sigma(z) = \cfrac{1}{1 + e^{-z}}$$
 
-$$\text{argmax}_w\text{  } \frac{1}{n}\prod_{i=1}^{n}p(y_i|x_i)$$
+$$\arg\max_w\text{  } \prod_{i=1}^{n}p(y_i|x_i)$$
 
-Which is equivalent to minimizing the Negative Log-likelihood.
+Which is equivalent to minimizing the average Negative Log-likelihood.
 
-$$\mathcal{L}(w) = \frac{1}{n}\sum_{i=1}^{n}-\log p(y_i|x_i)\$$
+$$\mathcal{L}(w) = \frac{1}{n}\sum_{i=1}^{n}-\log p(y_i|x_i)$$
 
 Now we will derive to find the $\beta$-smoothness of $\mathcal{l}(z_i) = -\log p(y_i|x_i)$, and then use that to find the smoothness for $\mathcal{L}(w)$.
 
@@ -61,7 +61,7 @@ Now we bring this to find the smoothness of $\mathcal{L}(w)$:
 
 <img src="https://github.com/slamgLuke/anystep-gradient-descent/raw/main/boards/board3.jpg" width="500">
 
-Because $y_i$ values are exactly +1 or -1, and the data points $x_i$ are bounded to have a norm of less than 1, the gradient of the NLL cannot change at a larger rate than the derivative of the log probability when varying the weights. Hence $\nabla\mathcal{L}(w)$ is 1/4-Lipschitz, and therefore, $\mathcal{L}(w)$ is 1/4-smooth.
+Because $y_i$ values are exactly +1 or -1, and the data points $x_i$ are bounded to have a norm of 1 at most, the gradient of the NLL cannot change at a larger rate than the derivative of the log probability when varying the weights. Hence $\nabla\mathcal{L}(w)$ is 1/4-Lipschitz, and therefore, $\mathcal{L}(w)$ is 1/4-smooth.
 
 The descent lemma guarantees GD convergence for any $0 < \eta < 8$.
 
