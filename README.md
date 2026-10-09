@@ -18,8 +18,6 @@ Wu et al. considers large GD step-sizes for binary classification with a linear 
 
 First, we need to understand what the classic theory says about how GD behaves.
 
-<img src="https://github.com/slamgLuke/anystep-gradient-descent/raw/main/boards/board1.jpg" width="500">
-
 For a $\beta$-smooth function, the descent lemma guarantees convergence if $0 < \eta < \cfrac{2}{\beta}$, where $\eta$ is the GD step-size.
 
 We will study the behavior of large GD step-sizes with the same conditions of Wu et al., which defines the following:
@@ -31,14 +29,19 @@ We will study the behavior of large GD step-sizes with the same conditions of Wu
 This last point is used to refer to the fact that under an optimal vector $w^{\ast}$ which separates the data the best, the closest point to the decision boundary is at distance $\gamma > 0$.
 This means that the vector $\frac{w^{\ast}}{\gamma}$ produces a score $z_i = y_i \langle x_i, \frac{w^{\ast}}{\gamma}\rangle \geq 1$ for all $i$.
 
+<img src="https://github.com/slamgLuke/anystep-gradient-descent/raw/main/boards/board1.jpg" width="500">
+
+
+
 
 ## Logistic Loss Landscape and convergence
 
 Optimizing the model is equivalent to maximizing the likelihood for the probability function:
 
-$$p(y|x) = \sigma(y_i \langle x_i, w\rangle), \;\; \sigma(z) = \cfrac{1}{1 + e^{-z}}$$
+$$p(y_i|x_i) = \sigma(y_i \langle x_i, w\rangle)$$
+$$\text{where  } \sigma(z) = \cfrac{1}{1 + e^{-z}}$$
 
-$$\text{argmax}_w \; \frac{1}{n}\prod_{i=1}^{n}p(y_i|x_i)$$
+$$\text{argmax}_w\text{  } \frac{1}{n}\prod_{i=1}^{n}p(y_i|x_i)$$
 
 Which is equivalent to minimizing the Negative Log-likelihood.
 
