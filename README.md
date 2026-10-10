@@ -128,7 +128,7 @@ Recall the GD definition:
 
 $$w_{t+1} = w_t - \eta \nabla L(w_t)$$
 
-After defininig $\Delta = -\eta \nabla L(w_t)$, the variation in a single step, one can restrict $L$ to the segment between $w_t$ and $w_{t+1}$. Let's define an interpolation $\phi(\alpha)$ between these two:
+After defining $\Delta = -\eta \nabla L(w_t)$, the variation in a single step, one can restrict $L$ to the segment between $w_t$ and $w_{t+1}$. Let's define an interpolation $\phi(\alpha)$ between these two:
 
 $$\phi (\alpha) = L(w_t + \alpha\Delta)$$
 
