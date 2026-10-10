@@ -45,15 +45,15 @@ Which is equivalent to minimizing the average Negative Log-likelihood.
 
 $$\mathcal{L}(w) = \frac{1}{n}\sum_{i=1}^{n}-\log p(y_i|x_i)$$
 
-Now we will derive to find the $\beta$-smoothness of $\mathcal{l}(z_i) = -\log p(y_i|x_i)$, and then use that to find the smoothness for $\mathcal{L}(w)$.
+Now we will derive to find the $\beta$-smoothness of $\ell(z_i) = -\log p(y_i|x_i)$, and then use that to find the smoothness for $\mathcal{L}(w)$.
 
 <img src="https://github.com/slamgLuke/anystep-gradient-descent/raw/main/boards/board2.jpg" width="500">
 
-The second derivative of $\mathcal{l}(z)$ peaks at $z=0$, with a value of 1/4.
+The second derivative of $\ell(z)$ peaks at $z=0$, with a value of 1/4.
 
-Since 1/4 is the absolute largest value of $\mathcal{l}''(z)$, we can use the Mean Value Theorem to show that $\mathcal{l}'(z)$ is 1/4-Lipschitz.
+Since 1/4 is the absolute largest value of $\ell''(z)$, we can use the Mean Value Theorem to show that $\ell'(z)$ is 1/4-Lipschitz.
 
-And the definition for smoothness states that a function is $\beta$-smooth when its derivative is $\beta$-Lipschitz. $\mathcal{l}(z)$ is 1/4-smooth.
+And the definition for smoothness states that a function is $\beta$-smooth when its derivative is $\beta$-Lipschitz. $\ell(z)$ is 1/4-smooth.
 
 Now we bring this to find the smoothness of $\mathcal{L}(w)$:
 
@@ -92,9 +92,68 @@ Since $x_ix_i^\top$ is constant, as $w$ moves away from 0, the value of $\ell''(
 
 The expected behavior one would find from this is that when using a large $\eta$ value for training, the loss curve would me more unstable at the beginning, becoming more stable as $|w|$ grows.
 
-However, we haven't explored GD convergence outside the range from the descent lemma.
+However, we haven't explored GD convergence outside the range from the descent lemma. This is the key finding of Wu et al.
+
+Wu et al. argues that GD with a large step-size **starts in an EoS phase**, before eventually transitioning into a **stable phase**.
+
+Given our findings, we know that a starting $w_0 = 0$ can generate a sharpness value of up to 1/4, so the starting EoS phase would be true for $\eta \geq 8$ assuming the highest eigenvalue possible.
+
+### Bound for Sharpness in a single point $w$
+
+First, by showing that the sharpness at point w is bounded by the loss function $S(w) \leq L(w)$, we can show that as the loss decreases, GD moves away from EoS into a more stable phase.
+
+The proof consists in showing that $\ell''(z) < \ell(z)$ for all $z$.
+
+<img src="https://github.com/slamgLuke/anystep-gradient-descent/raw/main/boards/board7.jpg" width="500">
+
+$$\ln (1 + e^{-z}) \geq \sigma(z)\sigma(-z)$$
+
+$$\ell(z) \geq \ell''(z)$$
+
+Hence $L(w)$ is an upper bound for the sharpness $S(w)$.
+
+Joining this with $\ell''(z) \leq \frac{1}{4}$, we get in turn:
+
+$$S(w) \leq \min(\frac{1}{4}, L(w))$$
+
+<br>
+<br>
+
+While this is very useful, in order to prove convergence, we need for the bound to hold for a whole segment in a GD step-iteration.
 
 
+### Bound for a segment $[w_t, w_{t+1}]$
+
+Recall the GD definition:
+
+$$w_{t+1} = w_t - \eta \nabla L(w_t)$$
+
+After defininig $\Delta = -\eta \nabla L(w_t)$, the variation in a single step, one can restrict $L$ to the segment between $w_t$ and $w_{t+1}$. Let's define an interpolation $\phi(\alpha)$ between these two:
+
+$$\phi (\alpha) = L(w_t + \alpha\Delta)$$
+
+$$\alpha \in [0, 1]$$
+
+$$\phi(0) = L(w_t)$$
+$$\phi(1) = L(w_{t+1})$$
+
+Applying the Fundamental Theorem of Calculus, we can define the behavior of the segment between$\phi(0)$ and $\phi(1)$
+
+<img src="https://github.com/slamgLuke/anystep-gradient-descent/raw/main/boards/board8.jpg" width="500">
+
+As it is shown, if we apply an upper bound $\phi''(\beta) \leq M$ for all $\beta \in [0, 1]$, we get:
+
+$$\phi(1) - \phi(0) = L(w_{t+1}) - L(w_t) \leq \frac{1}{n}\sum_{i=1}^n \ell'(z_i) \cdot y_i \langle \Delta, y_i\rangle  + \frac{M}{2}$$
+
+Using the prior results: $\ell''(z) \leq min(\frac{1}{4}, \ell(z))$, as well as Cauchy-Schwarz, we can set an upper bound:
+
+<img src="https://github.com/slamgLuke/anystep-gradient-descent/raw/main/boards/board9.jpg" width="500">
+
+Since $\frac{||\Delta||^2}{4}$ does not depend on any $\beta$, this is an upper bound for the whole segment.
+
+We can also represent the $\phi'(0)$ part in terms of $\nabla L(w)$.
+
+<img src="https://github.com/slamgLuke/anystep-gradient-descent/raw/main/boards/board10.jpg" width="500">
 
 ## Generalization beyond Logistic
 
